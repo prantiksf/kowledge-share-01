@@ -1,0 +1,31 @@
+{
+  "name": "kowledge-share-slack-demo",
+  "version": "1.0.0",
+  "description": "Figma to Code Demo - Slack Desktop App Recreation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "keywords": [
+    "figma",
+    "slack",
+    "react",
+    "design-to-code",
+    "demo"
+  ],
+  "author": "Prantik Banerjee",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prantiksf/kowledge-share-01.git"
+  },
+  "homepage": "https://kowledge-share-slack-demo-726bae97a00d.herokuapp.com/"
+}
