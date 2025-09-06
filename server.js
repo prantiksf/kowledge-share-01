@@ -7,9 +7,9 @@ const PORT = process.env.PORT || 3000;
 // Serve static files from the current directory
 app.use(express.static(__dirname));
 
-// Route for the main demo page (exact Figma recreation)
+// Route for the main demo page (pixel perfect Figma recreation)
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'exact-figma.html'));
+    res.sendFile(path.join(__dirname, 'pixel-perfect-figma.html'));
 });
 
 // Route for the original demo page
@@ -20,6 +20,11 @@ app.get('/original', (req, res) => {
 // Route for the previous attempt
 app.get('/demo', (req, res) => {
     res.sendFile(path.join(__dirname, 'demo.html'));
+});
+
+// Route for the previous exact figma attempt
+app.get('/exact-figma', (req, res) => {
+    res.sendFile(path.join(__dirname, 'exact-figma.html'));
 });
 
 // API endpoint to get project info
