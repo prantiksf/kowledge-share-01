@@ -7,8 +7,13 @@ const PORT = process.env.PORT || 3000;
 // Serve static files from the current directory
 app.use(express.static(__dirname));
 
-// Route for the main demo page
+// Route for the main demo page (complete version)
 app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'demo.html'));
+});
+
+// Route for the original demo page
+app.get('/original', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
