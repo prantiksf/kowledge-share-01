@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slack Desktop App - Exact Figma Recreation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+        
+        .slack-container {
+            width: 1120px;
+            height: 795px;
+            margin: 0 auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 18px 48px 0px rgba(0,0,0,0.1);
+            position: relative;
+            background: #4a154b;
+        }
+        
+        /* Top Bar */
+        .top-bar {
+            height: 40px;
+            background: linear-gradient(135deg, #4a154b 0%, #39063a 100%);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .window-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .control-close { background: #ff5f57; }
+        .control-minimize { background: #ffbd2e; }
+        .control-maximize { background: #28ca42; }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 4px;
+            margin-left: 16px;
+        }
+        
+        .nav-button {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .nav-button.disabled {
+            opacity: 0.4;
+        }
+        
+        .search-area {
+            flex: 1;
+            margin: 0 24px;
+            background: rgba(249, 237, 255, 0.25);
+            border-radius: 6px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            color: white;
+            font-size: 13px;
+        }
+        
+        .search-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .help-button {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: flex;
+            height: calc(100% - 40px);
+        }
+        
+        /* Left Navigation */
+        .left-nav {
+            width: 76px;
+            background: linear-gradient(135deg, #4a154b 0%, #39063a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 8px;
+            gap: 16px;
+        }
+        
+        .workspace-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 16px;
+            position: relative;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+        }
+        
+        .nav-tab {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .nav-tab.active {
+            background: rgba(249, 237, 255, 0.25);
+        }
+        
+        .nav-tab-icon {
+            font-size: 20px;
+            color: white;
+        }
+        
+        .nav-tab:not(.active) .nav-tab-icon {
+            opacity: 0.8;
+        }
+        
+        .nav-tab-label {
+            position: absolute;
+            bottom: -20px;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            width: 68px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .nav-tab:not(.active) .nav-tab-label {
+            color: rgba(244, 218, 255, 0.8);
+        }
+        
+        .profile-area {
+            margin-top: auto;
+        }
+        
+        .profile-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            position: relative;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzYiIGhlaWdodD0iMzYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgcng9IjgiIGZpbGw9IiNlMTMwNmMiLz4KPHRleHQgeD0iMTgiIHk9IjI0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9InN5c3RlbS11aSIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjYwMCI+UDwvdGV4dD4KPC9zdmc+');
+        }
+        
+        .status-dot {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background: #20a271;
+            border: 2px solid #4a154b;
+            border-radius: 50%;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 230px;
+            background: rgba(249, 237, 255, 0.11);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-header {
+            padding: 12px 16px 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .workspace-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-weight: 900;
+            font-size: 18px;
+        }
+        
+        .dropdown-icon {
+            font-size: 12px;
+        }
+        
+        .compose-button {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: rgba(249, 237, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 8px;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 16px;
+        }
+        
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            font-size: 15px;
+            min-height: 28px;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-item.unread {
+            font-weight: 900;
+        }
+        
+        .sidebar-item.active {
+            background: #f9edff;
+            color: #39063a;
+            font-weight: 400;
+        }
+        
+        .sidebar-item.dimmed {
+            opacity: 0.8;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 12px;
+            color: #eaeaea;
+            font-size: 15px;
+            font-weight: 400;
+        }
+        
+        .section-icon {
+            font-size: 16px;
+            width: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .item-icon {
+            width: 18px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .badge {
+            background: #eabdfb;
+            color: #4a154b;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 13px;
+            font-weight: 700;
+            min-width: 18px;
+            text-align: center;
+            margin-left: auto;
+        }
+        
+        .draft-counts {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+            opacity: 0.8;
+        }
+        
+        .draft-count {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 13px;
+            color: white;
+        }
+        
+        .user-avatar-small {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 4px;
+        }
+        
+        /* Main Chat Area */
+        .chat-area {
+            flex: 1;
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(94, 93, 96, 0.13);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .channel-info {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .channel-icon {
+            font-size: 20px;
+            color: #1d1c1d;
+            opacity: 0.9;
+        }
+        
+        .channel-name {
+            font-size: 18px;
+            font-weight: 900;
+            color: #1d1c1d;
+            margin: 0 4px;
+        }
+        
+        .channel-dropdown {
+            font-size: 12px;
+            color: #1d1c1d;
+        }
+        
+        .channel-description {
+            font-size: 13px;
+            color: #454447;
+            opacity: 0.9;
+            margin-left: 8px;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-button {
+            height: 28px;
+            background: white;
+            border: 1px solid rgba(94, 93, 96, 0.13);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        .members-button {
+            color: #454447;
+        }
+        
+        .huddles-button {
+            padding: 0 8px;
+        }
+        
+        .more-button {
+            padding: 0 4px;
+            width: 28px;
+        }
+        
+        .chat-tabs {
+            padding: 0 16px;
+            border-bottom: 1px solid rgba(94, 93, 96, 0.13);
+            display: flex;
+            align-items: end;
+            gap: 16px;
+            height: 36px;
+        }
+        
+        .chat-tab {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 8px 12px 8px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        
+        .chat-tab.active {
+            color: #1d1c1d;
+            border-bottom: 2px solid #83388a;
+        }
+        
+        .chat-tab:not(.active) {
+            color: #454447;
+        }
+        
+        .tab-icon {
+            font-size: 14px;
+        }
+        
+        .add-tab-button {
+            margin-left: auto;
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #454447;
+        }
+        
+        .add-tab-button:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .messages-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .messages-header {
+            padding: 0 20px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            border-bottom: 1px solid rgba(94, 93, 96, 0.13);
+        }
+        
+        .today-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1d1c1d;
+            cursor: pointer;
+        }
+        
+        .messages-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+        
+        .message {
+            display: flex;
+            gap: 12px;
+            padding: 8px 20px;
+            position: relative;
+        }
+        
+        .message:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        .message-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+        
+        .message-content {
+            flex: 1;
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        
+        .message-author {
+            font-size: 15px;
+            font-weight: 900;
+            color: #1d1c1d;
+        }
+        
+        .message-time {
+            font-size: 12px;
+            color: #454447;
+        }
+        
+        .message-text {
+            font-size: 15px;
+            line-height: 22px;
+            color: #1d1c1d;
+            margin-bottom: 8px;
+        }
+        
+        .mention {
+            color: #1264a3;
+            font-weight: 400;
+        }
+        
+        .message-reactions {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        
+        .reaction {
+            background: rgba(29, 28, 29, 0.06);
+            border-radius: 20px;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        
+        .reaction:hover {
+            background: rgba(29, 28, 29, 0.1);
+        }
+        
+        .reaction-emoji {
+            font-size: 16px;
+        }
+        
+        .reaction-count {
+            font-weight: 700;
+            color: #1d1c1d;
+        }
+        
+        .add-reaction {
+            background: rgba(29, 28, 29, 0.06);
+            border-radius: 20px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+        
+        .reply-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1264a3;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        .reply-avatars {
+            display: flex;
+            margin-right: 4px;
+        }
+        
+        .reply-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            margin-right: -4px;
+            border: 2px solid white;
+        }
+        
+        .reply-text {
+            color: #1264a3;
+        }
+        
+        .reply-timestamp {
+            color: #454447;
+            font-weight: 400;
+        }
+        
+        .new-indicator {
+            height: 1px;
+            background: #e01e5a;
+            margin: 8px 0;
+            position: relative;
+        }
+        
+        .new-indicator::after {
+            content: "New";
+            position: absolute;
+            right: 20px;
+            top: -8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #c01343;
+            background: white;
+            padding: 0 4px;
+        }
+        
+        .message-composer {
+            padding: 24px 20px;
+            border-top: 1px solid rgba(94, 93, 96, 0.13);
+        }
+        
+        .composer-input {
+            border: 1px solid rgba(94, 93, 96, 0.45);
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.08);
+            position: relative;
+        }
+        
+        .composer-text-area {
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 40px;
+        }
+        
+        .composer-cursor {
+            width: 1px;
+            height: 18px;
+            background: #1d1c1d;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .composer-placeholder {
+            flex: 1;
+            font-size: 15px;
+            color: #77757a;
+        }
+        
+        .composer-toolbar {
+            padding: 0 12px 12px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .toolbar-button {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #454447;
+            font-size: 16px;
+        }
+        
+        .toolbar-button:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .toolbar-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(94, 93, 96, 0.2);
+            margin: 0 4px;
+        }
+        
+        .send-button {
+            background: white;
+            border: 1px solid rgba(94, 93, 96, 0.13);
+            border-radius: 4px;
+            padding: 4px 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .send-button:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+    </style>
+</head>
+<body>
+    <div class="slack-container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="window-controls">
+                <div class="window-control control-close"></div>
+                <div class="window-control control-minimize"></div>
+                <div class="window-control control-maximize"></div>
+            </div>
+            
+            <div class="nav-buttons">
+                <div class="nav-button">📱</div>
+                <div class="nav-button">←</div>
+                <div class="nav-button disabled">→</div>
+                <div class="nav-button">🔄</div>
+            </div>
+            
+            <div class="search-area">
+                <div class="search-icon">🔍</div>
+                <div>Search Acme Inc</div>
+            </div>
+            
+            <div class="help-button">❓</div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Navigation -->
+            <div class="left-nav">
+                <div class="workspace-icon">A</div>
+                
+                <div class="nav-tabs">
+                    <div class="nav-tab active">
+                        <div class="nav-tab-icon">🏠</div>
+                        <div class="nav-tab-label">Home</div>
+                    </div>
+                    
+                    <div class="nav-tab">
+                        <div class="nav-tab-icon">💬</div>
+                        <div class="nav-tab-label">DMs</div>
+                    </div>
+                    
+                    <div class="nav-tab">
+                        <div class="nav-tab-icon">🔔</div>
+                        <div class="nav-tab-label">Activity</div>
+                    </div>
+                    
+                    <div class="nav-tab">
+                        <div class="nav-tab-icon">🤖</div>
+                        <div class="nav-tab-label">Agentforce</div>
+                    </div>
+                    
+                    <div class="nav-tab">
+                        <div class="nav-tab-icon">⋯</div>
+                        <div class="nav-tab-label">More</div>
+                    </div>
+                </div>
+                
+                <div class="profile-area">
+                    <div class="profile-button">
+                        <div class="status-dot"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    <div class="workspace-name">
+                        <span>Acme Inc</span>
+                        <span class="dropdown-icon">▼</span>
+                    </div>
+                    <div class="compose-button">✏️</div>
+                </div>
+                
+                <div class="sidebar-content">
+                    <!-- Pages Section -->
+                    <div class="sidebar-section">
+                        <div class="sidebar-item dimmed">
+                            <div class="item-icon">📄</div>
+                            <span>Unreads</span>
+                        </div>
+                        
+                        <div class="sidebar-item unread">
+                            <div class="item-icon">🧵</div>
+                            <span>Threads</span>
+                            <div class="badge">1</div>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div class="item-icon">▶️</div>
+                            <span>Drafts & sent</span>
+                            <div class="draft-counts">
+                                <div class="draft-count">
+                                    <span>✏️</span>
+                                    <span>3</span>
+                                </div>
+                                <div class="draft-count">
+                                    <span>⏰</span>
+                                    <span>1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Starred Section -->
+                    <div class="sidebar-section">
+                        <div class="section-header">
+                            <div class="section-icon">▼</div>
+                            <span>Starred</span>
+                        </div>
+                        
+                        <div class="sidebar-item unread">
+                            <div class="item-icon">#</div>
+                            <span>announcements</span>
+                        </div>
+                        
+                        <div class="sidebar-item unread">
+                            <div class="item-icon">#</div>
+                            <span>general</span>
+                        </div>
+                        
+                        <div class="sidebar-item active">
+                            <div class="item-icon">#</div>
+                            <span>project-acme</span>
+                        </div>
+                        
+                        <div class="sidebar-item unread">
+                            <div class="item-icon">#</div>
+                            <span>marketing</span>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div class="item-icon">🔒</div>
+                            <span>hiring</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Project Capricorn Section -->
+                    <div class="sidebar-section">
+                        <div class="section-header">
+                            <div class="section-icon">🚀</div>
+                            <span>Project Capricorn</span>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div class="item-icon">#</div>
+                            <span>project-capricorn</span>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div class="item-icon">🔒</div>
+                            <span>capricorn-leads</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Channels Section -->
+                    <div class="sidebar-section">
+                        <div class="section-header">
+                            <div class="section-icon">▼</div>
+                            <span>Channels</span>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div class="item-icon">#</div>
+                            <span>sales</span>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div class="item-icon">#</div>
+                            <span>support</span>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div class="item-icon">#</div>
+                            <span>user-feedback</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Direct Messages Section -->
+                    <div class="sidebar-section">
+                        <div class="section-header">
+                            <div class="section-icon">▼</div>
+                            <span>Direct messages</span>
+                        </div>
+                        
+                        <div class="sidebar-item unread">
+                            <div style="background: linear-gradient(45deg, #ff6b6b, #ee5a6f); width: 20px; height: 20px; border-radius: 4px;"></div>
+                            <span>Arcadio Buendia</span>
+                            <div class="badge">1</div>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div style="background: linear-gradient(45deg, #4ecdc4, #44a08d); width: 20px; height: 20px; border-radius: 4px; position: relative;">
+                                <div style="background: linear-gradient(45deg, #667eea, #764ba2); width: 14px; height: 14px; border-radius: 4px; position: absolute; right: -6px; top: 6px;"></div>
+                            </div>
+                            <span>Lee Hao, Lisa Dawson</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Agentforce Section -->
+                    <div class="sidebar-section">
+                        <div class="section-header">
+                            <div class="section-icon">▼</div>
+                            <span>Agentforce</span>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div style="background: linear-gradient(45deg, #667eea, #764ba2); width: 20px; height: 20px; border-radius: 4px;"></div>
+                            <span>Sales Agent</span>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div style="background: linear-gradient(45deg, #f093fb, #f5576c); width: 20px; height: 20px; border-radius: 4px;"></div>
+                            <span>Help Agent</span>
+                        </div>
+                        
+                        <div class="sidebar-item dimmed">
+                            <div style="background: linear-gradient(45deg, #4facfe, #00f2fe); width: 20px; height: 20px; border-radius: 4px;"></div>
+                            <span>Incident Manager</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Chat Area -->
+            <div class="chat-area">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="channel-info">
+                        <div class="channel-icon">#</div>
+                        <div class="channel-name">project-acme</div>
+                        <div class="channel-dropdown">▼</div>
+                        <div class="channel-description">Don't add water</div>
+                    </div>
+                    
+                    <div class="header-actions">
+                        <div class="action-button members-button">
+                            <span>👤</span>
+                            <span>12</span>
+                        </div>
+                        
+                        <div class="action-button huddles-button">
+                            <span>🎧</span>
+                            <span>▼</span>
+                        </div>
+                        
+                        <div class="action-button more-button">
+                            <span>⋮</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chat Tabs -->
+                <div class="chat-tabs">
+                    <div class="chat-tab active">
+                        <div class="tab-icon">📝</div>
+                        <span>Messages</span>
+                    </div>
+                    
+                    <div class="chat-tab">
+                        <div class="tab-icon">🎨</div>
+                        <span>Canvas</span>
+                    </div>
+                    
+                    <div class="chat-tab">
+                        <div class="tab-icon">📌</div>
+                        <span>Pins</span>
+                    </div>
+                    
+                    <div class="chat-tab">
+                        <div class="tab-icon">🔖</div>
+                        <span>Bookmarks</span>
+                    </div>
+                    
+                    <div class="chat-tab">
+                        <div class="tab-icon">📁</div>
+                        <span>Files</span>
+                    </div>
+                    
+                    <div class="chat-tab">
+                        <div class="tab-icon">⚙️</div>
+                        <span>Workflows</span>
+                    </div>
+                    
+                    <div class="add-tab-button">+</div>
+                </div>
+                
+                <!-- Messages Area -->
+                <div class="messages-area">
+                    <div class="messages-header">
+                        <div class="today-dropdown">
+                            <span>Today</span>
+                            <span>▼</span>
+                        </div>
+                    </div>
+                    
+                    <div class="messages-list">
+                        <!-- Lee Hao Message -->
+                        <div class="message">
+                            <div class="message-avatar" style="background: linear-gradient(45deg, #667eea, #764ba2); border-radius: 8px;"></div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <div class="message-author">Lee Hao</div>
+                                    <div class="message-time">10:58 AM</div>
+                                </div>
+                                <div class="message-text">
+                                    Sounds like we're on the right track. <span class="mention">@Zoe</span>, when do we aim to launch this campaign?
+                                </div>
+                                <div class="reply-info">
+                                    <div class="reply-avatars">
+                                        <div class="reply-avatar" style="background: linear-gradient(45deg, #4ecdc4, #44a08d);"></div>
+                                        <div class="reply-avatar" style="background: linear-gradient(45deg, #667eea, #764ba2);"></div>
+                                    </div>
+                                    <span class="reply-text">3 replies</span>
+                                    <span class="reply-timestamp">Last reply today at 11:32 AM</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Zoe Maxwell Message -->
+                        <div class="message">
+                            <div class="message-avatar" style="background: linear-gradient(45deg, #4ecdc4, #44a08d); border-radius: 8px;"></div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <div class="message-author">Zoe Maxwell</div>
+                                    <div class="message-time">11:27 AM</div>
+                                </div>
+                                <div class="message-text">
+                                    Okay, let's aim for a soft launch in six weeks, with a full-blown launch in eight. That gives us some buffer for adjustments. Does that timeline work for everyone?
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Matt Brewer Message -->
+                        <div class="message">
+                            <div class="message-avatar" style="background: linear-gradient(45deg, #ff6b6b, #ee5a6f); border-radius: 8px;"></div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <div class="message-author">Matt Brewer</div>
+                                    <div class="message-time">5:17 PM</div>
+                                </div>
+                                <div class="message-text">
+                                    Works for me, <span class="mention">@Zoe</span>. I'll start brainstorming some campaign taglines and messaging ideas.
+                                </div>
+                                <div class="message-reactions">
+                                    <div class="reaction">
+                                        <span class="reaction-emoji">🙌</span>
+                                        <span class="reaction-count">4</span>
+                                    </div>
+                                    <div class="reaction">
+                                        <span class="reaction-emoji">😊</span>
+                                    </div>
+                                    <div class="add-reaction">😊</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Carmen Vega Message -->
+                        <div class="message">
+                            <div class="message-avatar" style="background: linear-gradient(45deg, #f093fb, #f5576c); border-radius: 8px;"></div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <div class="message-author">Carmen Vega</div>
+                                    <div class="message-time">11:30 AM</div>
+                                </div>
+                                <div class="message-text">
+                                    I'll keep you all posted on the research progress. If you need anything specific, just let me know.
+                                </div>
+                                <div class="message-reactions">
+                                    <div class="reaction">
+                                        <span class="reaction-emoji">🍿</span>
+                                        <span class="reaction-count">3</span>
+                                    </div>
+                                    <div class="add-reaction">😊</div>
+                                </div>
+                                <div class="reply-info">
+                                    <div class="reply-avatars">
+                                        <div class="reply-avatar" style="background: linear-gradient(45deg, #4ecdc4, #44a08d);"></div>
+                                    </div>
+                                    <span class="reply-text">1 reply</span>
+                                    <span class="reply-timestamp">Last reply today at 10:00 AM</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- New Indicator -->
+                        <div class="new-indicator"></div>
+                        
+                        <!-- Final Zoe Maxwell Message -->
+                        <div class="message">
+                            <div class="message-avatar" style="background: linear-gradient(45deg, #4ecdc4, #44a08d); border-radius: 8px;"></div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <div class="message-author">Zoe Maxwell</div>
+                                    <div class="message-time">11:33 AM</div>
+                                </div>
+                                <div class="message-text">
+                                    Perfect! Let's stay on track and keep this channel our main hub for Project Acme updates. Thanks, team!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Message Composer -->
+                <div class="message-composer">
+                    <div class="composer-input">
+                        <div class="composer-text-area">
+                            <div class="composer-cursor"></div>
+                            <div class="composer-placeholder">Message #project-acme</div>
+                        </div>
+                        
+                        <div class="composer-toolbar">
+                            <div class="toolbar-left">
+                                <div class="toolbar-button">📎</div>
+                                <div class="toolbar-button">Aa</div>
+                                <div class="toolbar-button">😊</div>
+                                <div class="toolbar-button">@</div>
+                                <div class="toolbar-button">📹</div>
+                                <div class="toolbar-button">🎤</div>
+                                <div class="toolbar-divider"></div>
+                                <div class="toolbar-button">⚡</div>
+                            </div>
+                            
+                            <div class="send-button">
+                                <span>📤</span>
+                                <div style="width: 1px; height: 20px; background: rgba(94, 93, 96, 0.2); margin: 0 4px;"></div>
+                                <span>▼</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
