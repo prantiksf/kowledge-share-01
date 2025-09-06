@@ -16,9 +16,16 @@ kowledge-share-01/
 └── [image assets]            # SVG and PNG assets from Figma design
 ```
 
-### 🚀 Quick Start
+### 🚀 Quick Start & Live Demo
 
-1. **View the Demo**: Open `index.html` in your browser to see the interactive demo
+**🌟 EXACT FIGMA RECREATION:** https://kowledge-share-slack-demo-726bae97a00d.herokuapp.com/
+
+**Other Versions:**
+- Previous attempt: https://kowledge-share-slack-demo-726bae97a00d.herokuapp.com/demo
+- Original simple version: https://kowledge-share-slack-demo-726bae97a00d.herokuapp.com/original
+
+**Local Development:**
+1. **View the Demo**: Open `exact-figma.html` in your browser for pixel-perfect recreation
 2. **Use the Component**: Import `SlackDesktopApp.jsx` into your React project
 
 ### ✨ Features Implemented
